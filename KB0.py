@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from time import sleep
 
+keyStrokeDelay = .005
+
 # Keycode Setup Shortcuts
 _NULL = chr(0)
 _BEGIN = _NULL*2
@@ -184,35 +186,115 @@ _CLOSEWINDOW = _ALT+chr(61)+_CLOSE
 
 charDict = {
 " ": _SPACE,
-"a": _a, "b": _b, "c": _c, "d": _d, "e": _e, "f": _f, "g": _g, "h": _h, "i": _i, "j": _j, "k": _k, "l": _l, "m": _m, "n": _n, "o": _o, "p": _p, "q": _q, "r": _r, "s": _s, "t": _t, "u": _u, "v": _v, "w": _w, "x": _x, "y": _y, "z": _z, "A": _A, "B": _B, "C": _C, "D": _D, "E": _E, "F": _F, "G": _G, "H": _H, "I": _I, "J": _J, "K": _K, "L": _L, "M": _M, "N": _N, "O": _O, "P": _P, "Q": _Q, "R": _R, "S": _S, "T": _T, "U": _U, "V": _V, "W": _W, "X": _X, "Y": _Y, "Z": _Z, "1": _1, "2": _2, "3": _3, "4": _4, "5": _5, "6": _6, "7": _7, "8": _8, "9": _9, "0": _0, "`": _BACKQUOTE, "~": _TILDE, "!": _BANG, "@": _AT, "#": _HASH, "$": _DOLLAR, "%": _PERCENT, "^": _CARET, "&": _AMPERSAND, "*": _ASTERISK, "(": _LEFTPARENTHESIS, ")": _RIGHTPARENTHESIS, "-": _HYPHEN, "_": _UNDERSCORE, "=": _EQUALS, "+": _PLUS, "{": _LEFTBRACE, "}": _RIGHTBRACE, "[": _LEFTBRACKET, "]": _RIGHTBRACKET, "|": _PIPE, "\\": _BACKSLASH, ":": _COLON, ";": _SEMICOLON, "\"": _DOUBLEQUOTE, "'": _SINGLEQUOTE, ",": _COMMA, ".": _PERIOD, "/": _SLASH, "<": _LESSTHAN, ">": _GREATERTHAN, "?": _QUESTIONMARK, "\\": _BACKSLASH, "\"": _DOUBLEQUOTE, "\b": _BACKSPACE, "\t": _TAB, "\n": _ENTER }
+"a": _a, 
+"b": _b, 
+"c": _c, 
+"d": _d, 
+"e": _e, 
+"f": _f, 
+"g": _g, 
+"h": _h, 
+"i": _i, 
+"j": _j, 
+"k": _k, 
+"l": _l, 
+"m": _m, 
+"n": _n, 
+"o": _o, 
+"p": _p, 
+"q": _q, 
+"r": _r, 
+"s": _s, 
+"t": _t, 
+"u": _u, 
+"v": _v, 
+"w": _w, 
+"x": _x, 
+"y": _y, 
+"z": _z, 
+"A": _A, 
+"B": _B, 
+"C": _C, 
+"D": _D, 
+"E": _E, 
+"F": _F, 
+"G": _G, 
+"H": _H, 
+"I": _I, 
+"J": _J, 
+"K": _K, 
+"L": _L, 
+"M": _M, 
+"N": _N, 
+"O": _O, 
+"P": _P, 
+"Q": _Q, 
+"R": _R, 
+"S": _S, 
+"T": _T, 
+"U": _U, 
+"V": _V, 
+"W": _W, 
+"X": _X, 
+"Y": _Y, 
+"Z": _Z, 
+"1": _1, 
+"2": _2, 
+"3": _3, 
+"4": _4, 
+"5": _5, 
+"6": _6, 
+"7": _7, 
+"8": _8, 
+"9": _9, 
+"0": _0, 
+"`": _BACKQUOTE, 
+"~": _TILDE, 
+"!": _BANG, 
+"@": _AT, 
+"#": _HASH, 
+"$": _DOLLAR, 
+"%": _PERCENT, 
+"^": _CARET, 
+"&": _AMPERSAND, 
+"*": _ASTERISK, 
+"(": _LEFTPARENTHESIS, 
+")": _RIGHTPARENTHESIS, 
+"-": _HYPHEN, 
+"_": _UNDERSCORE, 
+"=": _EQUALS, 
+"+": _PLUS, 
+"{": _LEFTBRACE, 
+"}": _RIGHTBRACE, 
+"[": _LEFTBRACKET, 
+"]": _RIGHTBRACKET, 
+"|": _PIPE, 
+":": _COLON, 
+";": _SEMICOLON, 
+"\"": _DOUBLEQUOTE, 
+"'": _SINGLEQUOTE, 
+",": _COMMA, 
+".": _PERIOD, 
+"/": _SLASH, 
+"<": _LESSTHAN, 
+">": _GREATERTHAN, 
+"?": _QUESTIONMARK, 
+"\\": _BACKSLASH, 
+"\"": _DOUBLEQUOTE, 
+"\b": _BACKSPACE, 
+"\t": _TAB, 
+"\n": _ENTER 
+}
 
 def tx(report):
     with open('/dev/hidg0', 'rb+') as fd:
         fd.write(report.encode())
         fd.write(_CLEAR.encode())
+        sleep(keyStrokeDelay)
 
 def TX(string):
     for c in string:
         tx(getCode(c))
 
-def getCode(character, escaped = False):
+def getCode(character):
     return charDict[character]
-
-tx(_RUN)
-sleep(.5)
-TX("notepad.exe")
-tx(_ENTER)
-sleep(.5)
-TX(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
-tx(_ENTER)
-TX("Hello World!")
-tx(_ENTER)
-TX("-Neil R Austin rrrrr")
-tx(_ENTER)
-tx(_SAVE)
-TX("testfile.txt")
-tx(_ENTER)
-sleep(.5)
-tx(_ENTER)
-sleep(.5)
-tx(_CLOSEWINDOW)
