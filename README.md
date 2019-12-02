@@ -11,4 +11,10 @@ NOTES: if you're connecting your RPi0W to your computer through a USB port, then
 
 Now think about the possibilities of a wireless connection to a Bash Bunny at 1/10 the cost. As an instructor, I'm thinking 'bad-ass presentation clicker', but you probably have other ideas.
 
+Basic tutorial to setup a WiFi access point on a RPi0W (https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md) 
+
+NOTE: if your Pi suggests removing libjpeg at any point during this process, politely decline.
+
+NOTE: At this time, the instructions for creating a bridge won't work, because HID mode disables usb0
+
 Anyway, this is very much a work in progress.
