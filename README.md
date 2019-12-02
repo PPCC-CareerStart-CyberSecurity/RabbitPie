@@ -3,7 +3,7 @@ Proof-of-Concept Bash Bunny Emulator on Raspberry Pi Zero W Hardware
 
 Adapted from iStickToIt tutorial (http://www.isticktoit.net/?p=1383) and Linux Kernel USB Gadget Documentation (https://www.kernel.org/doc/Documentation/usb/gadget_configfs.txt)
 
-KB0.py, written by Neil Austion, simplifies a lot of the usual hex code slinging required for HID devices, at the expense of violating a ton of Python conventions. You'll get over it, though.
+KB0.py, written by Neil Austion, simplifies a lot of the usual hex code slinging required for HID devices, at the expense of violating a ton of Python conventions. You'll get over it, though. If I've missed any codes, you can find those at the following link, starting on page 53. (https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf)
 
 gremlin.py is adapted from a Bash Bunny script, also written by Neil Austin, to annoy students who forget to lock their computers before taking breaks. RabbitPie doesn't do Ducky Script yet, but I'll write a parser when I get bored enough.
 
