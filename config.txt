@@ -57,4 +57,3 @@ dtparam=spi=on
 dtparam=audio=on
 
 dtoverlay=dwc2
-dtoverlay=dwc2

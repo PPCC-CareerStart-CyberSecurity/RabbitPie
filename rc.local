@@ -16,8 +16,27 @@ _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
+_WHID=/boot/tty.wifi
+_USBG=/boot/tty.usb
+_PAYLOAD=/load/payload
 
-iptables-restore < /etc/iptables.ipv4.nat
+if [ -f "$_USBG" ] # Connect via USB-Ethernet
+then
+  cp /boot/usb.cmdline.txt /boot/cmdline.txt
+  cp /etc/client.dhcpcd.conf /etc/dhcpcd.conf
+  systemctl stop hostapd
+  systemctl stop dnsmasq
+  dhclient -r wlan0
+elif [ -f "$_WHID" ] # Connect via WIFI-AP
+then
+  cp /boot/wifi.cmdline.txt /boot/cmdline.txt
+  cp /etc/ap.dhcpcd.conf /etc/dhcpcd.conf
+  systemctl start hostapd
+  systemctl start dnsmasq
+  iptables-restore < /etc/iptables.ipv4.nat
+else
+  shutdown -h 1 "Shutting Down\nRun \'shutdown -c\' to cancel"
+fi
 
 /usr/bin/keyboard0_usb & # libcomposite configuration
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from time import sleep
 
-keyStrokeDelay = .005
+keyStrokeDelay = .006
 
 # Keycode Setup Shortcuts
 _NULL = chr(0)
